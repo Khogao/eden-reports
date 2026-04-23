@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Tài liệu phân tích đầu tư — Khu Dân Cư Ê Đen, Bình Chánh",
-  "homepage": "https://YOUR_GITHUB_USERNAME.github.io/eden-reports",
+  "homepage": "https://Khogao.github.io/eden-reports",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
