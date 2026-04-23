@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-FS Kịch Bản V1 — Khu Dân Cư Ê Đen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:       #1a2b1e;
+    --forest-mid:   #243b28;
+    --forest-light: #2f4d34;
+    --amber:        #b87820;
+    --amber-light:  #d4971e;
+    --amber-pale:   #c49030;
+    --rust:         #a63d2f;
+    --paper:        #f7f4ee;
+    --paper-warm:   #ede8dc;
+    --border:       #d0c8b0;
+    --border-str:   #b0a47c;
+    --ink:          #1c1c1a;
+    --ink-mid:      #3a3a30;
+    --ink-soft:     #6a6858;
+    --sidebar-w:    280px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;font-size:125%}
+  body{font-family:'Source Sans 3',sans-serif;font-weight:300;background:var(--paper);color:var(--ink);line-height:1.8}
+
+  /* SIDEBAR */
+  #sidebar{position:fixed;left:0;top:0;width:var(--sidebar-w);height:100vh;background:var(--forest);overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+  .sb-header{padding:26px 20px 18px;border-bottom:1px solid rgba(184,120,32,0.3)}
+  .sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .sb-hex{width:28px;height:28px;background:var(--amber);clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);flex-shrink:0}
+  .sb-logo-text{font-family:'Playfair Display',serif;font-size:10px;color:var(--amber-light);line-height:1.4}
+  .sb-tagline{font-size:10.5px;color:rgba(255,255,255,0.4);line-height:1.5}
+  .sb-nav{padding:12px 0;flex:1}
+  .nav-label{padding:10px 20px 5px;font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:0.15em;font-weight:600}
+  .nav-item{display:block;padding:7px 20px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:12px;font-weight:300;border-left:2px solid transparent;transition:all 0.2s;line-height:1.4}
+  .nav-item:hover{color:#fff;background:rgba(184,120,32,0.12);border-left-color:var(--amber)}
+  .nav-item.active{color:var(--amber-light);border-left-color:var(--amber);background:rgba(184,120,32,0.1)}
+  .nav-sub{padding:5px 20px 5px 32px;font-size:11px;color:rgba(255,255,255,0.38)}
+  .nav-sub:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.04);border-left-color:transparent}
+  .sb-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.07);font-size:10px;color:rgba(255,255,255,0.28);line-height:1.65}
+  .sb-footer a{color:var(--amber-light);text-decoration:none}
+
+  /* MAIN */
+  #main{margin-left:var(--sidebar-w);min-height:100vh}
+
+  /* HERO */
+  .hero{background:var(--forest);padding:68px 72px 50px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:0;right:0;width:380px;height:100%;background:linear-gradient(135deg,transparent 40%,rgba(184,120,32,0.06) 100%)}
+  .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--amber),transparent)}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(184,120,32,0.4);padding:4px 14px;margin-bottom:22px}
+  .hero-badge span{font-size:9px;color:var(--amber-light);text-transform:uppercase;letter-spacing:0.14em;font-weight:600}
+  .badge-dot{width:4px;height:4px;background:var(--rust);border-radius:50%}
+  .hero h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;line-height:1.25;max-width:640px;margin-bottom:12px}
+  .hero-sub{font-size:14.5px;color:rgba(255,255,255,0.48);font-weight:300;margin-bottom:30px;max-width:540px;line-height:1.65}
+  .hero-note{display:inline-block;background:rgba(166,61,47,0.2);border:1px solid rgba(166,61,47,0.4);padding:6px 14px;font-size:11px;color:rgba(255,160,140,0.9);margin-bottom:28px;border-radius:2px}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;max-width:800px}
+  .stat-box{background:rgba(255,255,255,0.04);padding:16px 18px}
+  .stat-label{font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;margin-bottom:5px}
+  .stat-value{font-size:21px;font-family:'Playfair Display',serif;color:#fff;font-weight:700;line-height:1.1}
+  .stat-note{font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px}
+
+  /* CONTENT */
+  .content{padding:0 72px 80px}
+  .section{padding-top:64px}
+  .sec-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:32px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+  .sec-num{font-family:'Playfair Display',serif;font-size:42px;color:var(--amber-pale);font-weight:700;line-height:1;flex-shrink:0;margin-top:-4px}
+  .sec-label{font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:0.15em;font-weight:600;margin-bottom:5px}
+  .sec-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--forest);font-weight:700;line-height:1.3}
+  .subsec{margin-bottom:38px}
+  .subsec-title{font-size:14px;font-weight:600;color:var(--forest);margin-bottom:13px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .subsec-title::before{content:'';width:3px;height:15px;background:var(--amber);flex-shrink:0}
+  p{font-size:14px;color:var(--ink-mid);margin-bottom:12px;font-weight:300;line-height:1.85}
+  strong{font-weight:600;color:var(--ink)}
+
+  /* CALLOUT */
+  .callout{background:var(--forest);border-left:4px solid var(--amber);padding:16px 20px;margin:18px 0;border-radius:0 2px 2px 0}
+  .callout p{color:rgba(255,255,255,0.78);font-size:13px;margin-bottom:0;font-style:italic;font-weight:300}
+  .callout strong{color:var(--amber-light);font-style:normal}
+
+  /* NOTE BOX */
+  .note{background:#f6ead8;border:1px solid #d4b88a;border-left:4px solid var(--amber);padding:12px 18px;margin:14px 0;border-radius:0 2px 2px 0}
+  .note p{font-size:13px;color:#5a3a08;margin-bottom:0}
+
+  /* WARNING */
+  .warn{background:#fdf0ec;border:1px solid #e8b4a0;border-left:4px solid var(--rust);padding:12px 18px;margin:14px 0;border-radius:0 2px 2px 0}
+  .warn p{font-size:13px;color:#6a2018;margin-bottom:0}
+
+  /* TABLE */
+  .tbl-wrap{overflow-x:auto;margin:14px 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead tr{background:var(--forest)}
+  th{padding:10px 14px;color:var(--amber-light);font-weight:600;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.08em}
+  td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--ink-mid);font-weight:300;vertical-align:top;line-height:1.6}
+  tr:nth-child(even) td{background:var(--paper-warm)}
+  tr:last-child td{border-bottom:none}
+  .td-right{text-align:right;font-variant-numeric:tabular-nums}
+  .td-bold{font-weight:600;color:var(--ink)}
+  .td-amber{color:var(--amber);font-weight:600}
+  .td-total-row td{background:rgba(26,43,30,0.07)!important;font-weight:600;color:var(--forest)}
+  .td-highlight{color:var(--amber);font-weight:600}
+  .td-base{background:rgba(184,120,32,0.06)!important;font-weight:600}
+
+  /* ASCII DIAGRAM */
+  .site-diagram{background:var(--forest);color:rgba(255,255,255,0.82);font-family:'Courier New',monospace;font-size:12px;line-height:1.6;padding:22px 26px;border-radius:2px;overflow-x:auto;margin:16px 0;border-left:4px solid var(--amber)}
+
+  /* BULLET LIST */
+  .bullet-list{list-style:none;padding:0;margin:0 0 20px}
+  .bullet-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink-mid);font-weight:300}
+  .bullet-list li:last-child{border-bottom:none}
+  .bullet-list li::before{content:'▸';color:var(--amber);font-size:12px;flex-shrink:0;margin-top:2px}
+
+  /* CARDS */
+  .card-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+  .card{background:#fff;border:1px solid var(--border);padding:18px 20px;border-radius:2px;position:relative}
+  .card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%}
+  .card.amber::before{background:var(--amber)}
+  .card.forest::before{background:var(--forest)}
+  .card.rust::before{background:var(--rust)}
+  .card-num{font-family:'Playfair Display',serif;font-size:26px;color:var(--amber);font-weight:700;line-height:1;margin-bottom:4px}
+  .card-label{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:600}
+  .card p{font-size:12.5px;color:var(--ink-soft);margin-bottom:0}
+
+  /* PA BLOCKS */
+  .pa-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  .pa-block{border:1px solid var(--border);border-radius:2px;overflow:hidden}
+  .pa-top{background:var(--forest-mid);padding:12px 18px;display:flex;align-items:center;gap:9px}
+  .pa-badge{background:var(--amber);color:#fff;padding:2px 9px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em}
+  .pa-top-title{font-size:13px;color:#fff;font-weight:600}
+  .pa-body{padding:14px 18px;background:#fff}
+  .pa-body p{font-size:13px;margin-bottom:0;color:var(--ink-mid)}
+
+  /* DIVIDER */
+  hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+
+  /* VERSION DIFF BOX */
+  .diff-box{background:rgba(184,120,32,0.05);border:1px solid rgba(184,120,32,0.25);padding:14px 18px;margin:14px 0;border-radius:2px}
+  .diff-box p{font-size:13px;color:var(--ink-mid);margin-bottom:0}
+
+  /* PRINT */
+  @media print{#sidebar{display:none}#main{margin-left:0}.hero,.content{padding-left:40px;padding-right:40px}}
+  @media(max-width:900px){#sidebar{transform:translateX(-100%)}#main{margin-left:0}.hero,.content{padding-left:28px;padding-right:28px}.hero-stats{grid-template-columns:1fr 1fr}.card-row{grid-template-columns:1fr 1fr}.pa-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-hex"></div>
+      <div class="sb-logo-text">Khu Dân Cư Ê Đen<br>Pre-FS Kịch Bản V1</div>
+    </div>
+    <div class="sb-tagline">Phân tích tiền khả thi nội bộ<br>Tháng 4/2026 · Bình Chánh, TP.HCM</div>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-label">Phân tích</div>
+    <a href="#s1" class="nav-item">1. Thông tin dự án</a>
+    <a href="#s1a" class="nav-item nav-sub">Hình học khu đất</a>
+    <a href="#s2" class="nav-item">2. Cơ cấu sử dụng đất</a>
+    <a href="#s3" class="nav-item">3. Giả định xây dựng</a>
+    <a href="#s3-dg" class="nav-sub nav-item">Đơn giá xây dựng</a>
+    <a href="#s4" class="nav-item">4. Chi phí mua đất</a>
+    <a href="#s5" class="nav-item">5. Chi phí XD &amp; hạ tầng</a>
+    <a href="#s6" class="nav-item">6. Tiền CMĐSDĐ</a>
+    <a href="#s6-bieu" class="nav-sub nav-item">Bảng giá NQ87/2025</a>
+    <a href="#s7" class="nav-item">7. Doanh thu dự kiến</a>
+    <a href="#s8" class="nav-item">8. Ma trận kết quả</a>
+    <a href="#s8-1" class="nav-sub nav-item">8.1 Kết quả tổng hợp</a>
+    <a href="#s8-2" class="nav-sub nav-item">8.2 Độ nhạy giá CH</a>
+    <a href="#s8-3" class="nav-sub nav-item">8.3 Độ nhạy giá BT</a>
+    <a href="#s8-4" class="nav-sub nav-item">8.4 Độ nhạy giá LK</a>
+    <a href="#s9" class="nav-item">9. Chỉ tiêu bổ sung</a>
+    <a href="#s10" class="nav-item">10. Phú Cường</a>
+    <a href="#s11" class="nav-item">11. Khoản chưa tính</a>
+    <a href="#s12" class="nav-item">12. So sánh V1 vs OG</a>
+    <a href="#s13" class="nav-item">13. Lịch sử pháp lý</a>
+  </div>
+  <div class="sb-footer">
+    V1 — Tháng 4/2026<br>
+    Xã An Phú Tây, Huyện Bình Chánh<br><br>
+    Người lập: Kts Lê Nguyên Phi<br>
+    <a href="tel:0916509000">0916 509 000</a> · <a href="mailto:lenguyenphi@gmail.com">lenguyenphi@gmail.com</a>
+  </div>
+</nav>
+
+<div id="main">
+
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span>Tài liệu nội bộ — Kịch bản điều chỉnh quy hoạch</span>
+    </div>
+    <h1>Phân Tích Tiền Khả Thi<br>Kịch Bản V1</h1>
+    <p class="hero-sub">Khu dân cư Ê Đen · CT10 toàn bộ chung cư · Hệ số sử dụng đất 8 lần · ~18–19 tầng · Xã An Phú Tây, Huyện Bình Chánh, TP.HCM</p>
+    <div class="hero-note">⚠ Kịch bản V1 yêu cầu xin điều chỉnh quy hoạch 1/500 — chưa được phê duyệt</div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-label">Tổng doanh thu</div>
+        <div class="stat-value">14.879<span style="font-size:13px;font-weight:400"> tỷ</span></div>
+        <div class="stat-note">PA cơ sở (giá CH 70 tr/m²)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">EBIT (PA B)</div>
+        <div class="stat-value">41,9<span style="font-size:13px;font-weight:400">%</span></div>
+        <div class="stat-note">6.240 tỷ · Giá đất tham khảo</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">LNST (PA B)</div>
+        <div class="stat-value">~4.312<span style="font-size:13px;font-weight:400"> tỷ</span></div>
+        <div class="stat-note">Gấp 3,3× so với OG</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Tổng sàn CT10</div>
+        <div class="stat-value">222.736<span style="font-size:11px;font-weight:400"> m²</span></div>
+        <div class="stat-note">~1.987 căn hộ · hệ số 8×</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- S1 -->
+    <div id="s1" class="section">
+      <div class="sec-header">
+        <div class="sec-num">01</div>
+        <div>
+          <div class="sec-label">Phần 1</div>
+          <div class="sec-title">Thông Tin Dự Án</div>
+        </div>
+      </div>
+      <div class="diff-box">
+        <p><strong>Điểm khác biệt so với OG:</strong> CT10 cả 3 tòa A, B, C đều là chung cư (hệ số 8 lần vs 3,28 lần). Không còn văn phòng cho thuê Lô C. Tầng 1–2: TMDV (55% hiệu dụng). Tầng 3+: căn hộ (75%). Biệt thự + liên kế giữ nguyên. Chi phí tư vấn pháp lý: 120 tỷ (tăng từ 60 tỷ).</p>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hạng mục</th><th>Thông tin</th></tr></thead>
+          <tbody>
+            <tr><td>Tên dự án</td><td>Khu Dân Cư Ê Đen (Eden)</td></tr>
+            <tr><td>Vị trí</td><td>Xã An Phú Tây, Huyện Bình Chánh, TP.HCM</td></tr>
+            <tr><td>Mặt tiền</td><td>Đường Nguyễn Văn Linh (lộ giới 120m)</td></tr>
+            <tr><td>Diện tích trong ranh</td><td><strong>75.386,4 m²</strong> (~7,5 ha)</td></tr>
+            <tr><td>Diện tích liên quan</td><td><strong>92.195,1 m²</strong> (~9,2 ha)</td></tr>
+            <tr><td class="td-bold">Kịch bản V1</td><td><strong>CT10 toàn bộ chung cư — cần xin điều chỉnh quy hoạch 1/500</strong></td></tr>
+            <tr><td class="td-bold" style="color:var(--rust)">Tình trạng pháp lý</td><td style="color:var(--rust)"><strong>QH điều chỉnh cần phê duyệt trước khi triển khai</strong></td></tr>
+            <tr><td>Tình trạng san lấp</td><td>~90% hoàn tất</td></tr>
+            <tr><td>Giá mua đất</td><td>15 tr/m² (chính thức) — ~13 tr/m² (ngoài Phú Cường, tham khảo)</td></tr>
+            <tr><td>Phú Cường</td><td>Tạm tính <strong>15 tr/m²</strong> (11.293 m²) — sẵn sàng thương lượng</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S1A -->
+    <div id="s1a" class="section">
+      <div class="sec-header">
+        <div class="sec-num">1A</div>
+        <div>
+          <div class="sec-label">Phần 1A</div>
+          <div class="sec-title">Mô Tả Hình Học Khu Đất</div>
+        </div>
+      </div>
+<pre class="site-diagram">         ĐƯỜNG NGUYỄN VĂN LINH (lộ giới 120m)
+         ←—————————————— 160m ——————————————→
+    0m   ┌──────────────────────────────────┐  ─┐
+         │  KHU CT10 (0–~174m)              │   │
+         │  Block A, B, C — chung cư 18–19 tầng │   │ ~174m
+         │  Tầng 1–2: TMDV (hiệu dụng 55%)    │   │
+         │  Tầng 3+: căn hộ (hiệu dụng 75%)   │   │
+         │  27.842 m² đất — hệ số 8 lần      │   │
+         │  Footprint 3 block: ~12.000 m²    │   │
+         │  Tổng sàn xây dựng: 222.736 m²   │   │
+         ├──────────────────────────────────┤  ─┤ Đường N1 (lộ giới 21,5m)
+         │  VỊ TRÍ 2 (~174–~324m)          │   │
+         │  Khu TT13: Nhà liên kế           │   │ ~150m
+         │  11.150 m² đất ở                 │   │
+         ╞══════════════════════════════════╡  ─┤ Đường N3 (lộ giới 59m)
+         │  VỊ TRÍ 3 (~324–471m)           │   │
+         │  Khu TT14: Nhà liên kế           │   │ ~147m
+         │  11.149 m² đất ở                 │   │
+   471m  └──────────────────────────────────┘  ─┘</pre>
+      <div class="tbl-wrap" style="margin-top:20px">
+        <table>
+          <thead><tr><th>Phân khu</th><th>Chi tiết</th><th class="td-right">Diện tích</th><th>Công năng</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CT10</strong></td><td>Block A, B, C — chung cư 18–19 tầng (TMDV T1–2)</td><td class="td-right td-bold">27.842 m²</td><td>~2.000 căn + TMDV tầng đế — hệ số <strong>8 lần</strong></td></tr>
+            <tr><td>TT13 + TT14</td><td>Biệt thự B1–B5 + Liên kế L1</td><td class="td-right">28.826 m²</td><td>76 căn biệt thự + 24 căn liên kế</td></tr>
+            <tr><td>Hạ tầng chính</td><td>Đường N1, N3, N5, D1, D3</td><td class="td-right">18.718 m²</td><td>Giao thông, hạ tầng kỹ thuật</td></tr>
+            <tr class="td-total-row"><td><strong>Tổng</strong></td><td></td><td class="td-right"><strong>75.386 m²</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div id="s2" class="section">
+      <div class="sec-header">
+        <div class="sec-num">02</div>
+        <div>
+          <div class="sec-label">Phần 2</div>
+          <div class="sec-title">Cơ Cấu Sử Dụng Đất</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Phân khu</th><th class="td-right">Diện tích (m²)</th><th>Công năng</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Đất CT10 — Block A, B, C</strong></td><td class="td-right td-bold">27.842</td><td>Chung cư 18–19 tầng + TMDV tầng 1–2 — hệ số <strong>8 lần</strong></td></tr>
+            <tr><td>Đất nhà ở thấp tầng (TT13 + TT14)</td><td class="td-right">28.826</td><td>Biệt thự (76 căn) + Liên kế (24 căn)</td></tr>
+            <tr><td>Đất giao thông &amp; hạ tầng</td><td class="td-right">18.718</td><td>—</td></tr>
+            <tr class="td-total-row"><td><strong>Tổng trong ranh</strong></td><td class="td-right"><strong>75.386</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="subsec" style="margin-top:28px">
+        <div class="subsec-title">Hiện trạng bồi thường &amp; GPMB</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Nhóm</th><th class="td-right">Diện tích (m²)</th><th class="td-right">Tỷ lệ</th><th>Tình trạng</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Đã bồi thường xong</strong></td><td class="td-right td-highlight">54.253,3</td><td class="td-right td-highlight">71,9%</td><td>Hoàn tất — đất sạch</td></tr>
+              <tr><td>Thỏa thuận, chờ chi trả</td><td class="td-right">6.640</td><td class="td-right">8,8%</td><td>Đang xử lý</td></tr>
+              <tr><td>Phú Cường (đang đàm phán)</td><td class="td-right">11.293</td><td class="td-right">15,0%</td><td>Tạm tính 15 tr/m² — sẵn thương lượng</td></tr>
+              <tr><td>Đất công, khác trong ranh</td><td class="td-right">~3.200</td><td class="td-right">4,3%</td><td>Cần xác nhận</td></tr>
+              <tr class="td-total-row"><td><strong>Tổng trong ranh</strong></td><td class="td-right"><strong>75.386</strong></td><td class="td-right"><strong>100%</strong></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div id="s3" class="section">
+      <div class="sec-header">
+        <div class="sec-num">03</div>
+        <div>
+          <div class="sec-label">Phần 3</div>
+          <div class="sec-title">Giả Định Xây Dựng</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hạng mục</th><th>Tham số</th><th class="td-right">Tổng sàn</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CT10 (A+B+C) — hệ số 8 lần</strong></td><td>27.842 m² × 8</td><td class="td-right td-bold">222.736 m²</td></tr>
+            <tr><td>Footprint mỗi block</td><td>~4.000 m²/block · 3 block</td><td class="td-right">~12.000 m²</td></tr>
+            <tr><td>Sân, đường, cây xanh CT10</td><td>27.842 − 12.000</td><td class="td-right">~15.842 m²</td></tr>
+            <tr><td>— TMDV tầng 1–2 (3 × 4.000 m² × 2F)</td><td>—</td><td class="td-right td-bold">24.000 m²</td></tr>
+            <tr><td>— Căn hộ tầng 3+ (còn lại)</td><td>222.736 − 24.000</td><td class="td-right td-bold">198.736 m²</td></tr>
+            <tr><td>Sàn TMDV thương phẩm (55%)</td><td>24.000 × 55%</td><td class="td-right td-amber">13.200 m²</td></tr>
+            <tr><td>Sàn căn hộ thương phẩm (75%)</td><td>198.736 × 75%</td><td class="td-right td-amber">149.052 m²</td></tr>
+            <tr><td><strong>Số căn hộ</strong></td><td>~75 m²/căn; 3 block × ~660 căn</td><td class="td-right td-amber"><strong>~1.987 căn</strong></td></tr>
+            <tr><td>Số tầng mỗi block</td><td>222.736 / 12.000 ÷ tầng</td><td class="td-right">~18–19 tầng</td></tr>
+            <tr><td><strong>Biệt thự B1–B5</strong> — hệ số 1,5</td><td>19.365,5 m² × 1,5</td><td class="td-right td-bold">29.048 m²</td></tr>
+            <tr><td><strong>Nhà liên kế L1</strong> — hệ số 2,8</td><td>2.934 m² × 2,8</td><td class="td-right td-bold">8.215 m²</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="s3-dg" class="subsec" style="margin-top:28px">
+        <div class="subsec-title">Đơn giá xây dựng</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Hạng mục</th><th class="td-right">Đơn giá</th><th>Ghi chú</th></tr></thead>
+            <tbody>
+              <tr><td>Chung cư 18–19 tầng (kết cấu + cơ điện, gộp)</td><td class="td-right td-bold">15 tr/m²</td><td>Đơn giá chuẩn cao tầng</td></tr>
+              <tr><td>TMDV tầng đế (tích hợp)</td><td class="td-right td-bold">15 tr/m²</td><td>Áp dụng thống nhất</td></tr>
+              <tr><td>Nhà liên kế có hầm</td><td class="td-right td-bold">10 tr/m²</td><td></td></tr>
+              <tr><td>Cây xanh &amp; cảnh quan</td><td class="td-right">0,7 tr/m²</td><td>Trên toàn ranh</td></tr>
+              <tr><td>Hạ tầng kỹ thuật nội bộ</td><td class="td-right">2 tr/m²</td><td>Trên toàn ranh</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div id="s4" class="section">
+      <div class="sec-header">
+        <div class="sec-num">04</div>
+        <div>
+          <div class="sec-label">Phần 4</div>
+          <div class="sec-title">Chi Phí Mua Đất</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hạng mục</th><th class="td-right">PA A — 15 tr/m²</th><th class="td-right">PA B — 13 tr/m² + PC 15 tr</th></tr></thead>
+          <tbody>
+            <tr><td>Đơn giá đất thông thường (64.093 m²)</td><td class="td-right">15 tr/m²</td><td class="td-right">13 tr/m²</td></tr>
+            <tr><td>Phú Cường (11.293 m²)</td><td class="td-right">15 tr/m²</td><td class="td-right"><strong>15 tr/m²</strong> (cố định)</td></tr>
+            <tr><td>64.093 m² × đơn giá</td><td class="td-right">961 tỷ</td><td class="td-right">833 tỷ</td></tr>
+            <tr><td>Phú Cường 11.293 × 15 tr</td><td class="td-right">169 tỷ</td><td class="td-right">169 tỷ</td></tr>
+            <tr class="td-total-row"><td><strong>Tổng chi phí mua đất</strong></td><td class="td-right"><strong>1.131 tỷ</strong></td><td class="td-right"><strong>1.003 tỷ</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><p>Phú Cường là pháp nhân <strong>sẵn sàng thương lượng thương mại</strong> — không có tranh chấp pháp lý. Đàm phán dự kiến hoàn tất trong giai đoạn chuẩn bị triển khai.</p></div>
+    </div>
+
+    <!-- S5 -->
+    <div id="s5" class="section">
+      <div class="sec-header">
+        <div class="sec-num">05</div>
+        <div>
+          <div class="sec-label">Phần 5</div>
+          <div class="sec-title">Chi Phí Xây Dựng &amp; Hạ Tầng</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Hạng mục</th><th class="td-right">Khối lượng</th><th class="td-right">Đơn giá</th><th class="td-right">Thành tiền</th></tr></thead>
+          <tbody>
+            <tr><td>CT10 — Chung cư + TMDV tầng đế (A, B, C)</td><td class="td-right">222.736 m² sàn</td><td class="td-right">15 tr/m²</td><td class="td-right td-bold">3.341 tỷ</td></tr>
+            <tr><td>Biệt thự B1–B5</td><td class="td-right">29.048 m² sàn</td><td class="td-right">10 tr/m²</td><td class="td-right td-bold">290 tỷ</td></tr>
+            <tr><td>Nhà liên kế L1</td><td class="td-right">8.215 m² sàn</td><td class="td-right">10 tr/m²</td><td class="td-right td-bold">82 tỷ</td></tr>
+            <tr><td>Cây xanh &amp; cảnh quan</td><td class="td-right">75.386 m²</td><td class="td-right">0,7 tr/m²</td><td class="td-right td-bold">53 tỷ</td></tr>
+            <tr><td>Hạ tầng kỹ thuật nội bộ</td><td class="td-right">75.386 m²</td><td class="td-right">2 tr/m²</td><td class="td-right td-bold">151 tỷ</td></tr>
+            <tr class="td-total-row"><td><strong>Tổng chi phí xây dựng &amp; hạ tầng</strong></td><td></td><td></td><td class="td-right"><strong>3.917 tỷ</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div id="s6" class="section">
+      <div class="sec-header">
+        <div class="sec-num">06</div>
+        <div>
+          <div class="sec-label">Phần 6</div>
+          <div class="sec-title">Tiền Chuyển Mục Đích Sử Dụng Đất</div>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">6.1 Cơ sở pháp lý</div>
+        <ul class="bullet-list">
+          <li>Luật Đất đai 2024 (Điều 107, Điều 157); Nghị định 103/2024/NĐ-CP</li>
+          <li><strong>Nghị quyết 87/2025/NQ-HĐND</strong> — Bảng giá đất lần đầu (hiệu lực 01/01/2026)</li>
+          <li>Chỉ dùng bảng giá trực tiếp — <strong>không nhân hệ số K</strong></li>
+        </ul>
+      </div>
+      <div id="s6-bieu" class="subsec">
+        <div class="subsec-title">6.2 Bảng giá NQ 87/2025 — Khu vực dự án</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Vị trí</th><th class="td-right">Đất ở</th><th class="td-right">TMDV</th><th>Áp dụng</th></tr></thead>
+            <tbody>
+              <tr><td><strong>VT1</strong> — Nguyễn Văn Linh</td><td class="td-right td-bold">49,8 tr/m²</td><td class="td-right">24,9 tr/m²</td><td>Block A+B+C (50m đầu)</td></tr>
+              <tr><td><strong>VT2</strong> — Đường nội khu chính</td><td class="td-right td-bold">34,5 tr/m²</td><td class="td-right">17,3 tr/m²</td><td>Block A+B (130m còn lại), TT13</td></tr>
+              <tr><td><strong>VT3</strong> — Đường nhánh nhỏ</td><td class="td-right td-bold">23,0 tr/m²</td><td class="td-right">11,5 tr/m²</td><td>TT14</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">6.3 Tính toán tiền CMĐSDĐ</div>
+        <div class="note"><p><strong>Lưu ý V1:</strong> Block C (3.132 m² VT1) nay là đất chung cư (đất ở) thay vì đất TMDV — đơn giá tăng từ 24,9 lên <strong>49,8 tr/m²</strong>, tăng thêm <strong>~75 tỷ</strong> so với OG.</p></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Hạng mục</th><th class="td-right">Diện tích</th><th>Vị trí</th><th class="td-right">Đơn giá</th><th class="td-right">Tiền SDĐ</th></tr></thead>
+            <tbody>
+              <tr><td>Chung cư Block A+B — VT1 (50m đầu, 8.071 m²)</td><td class="td-right">8.071</td><td>VT1 đất ở</td><td class="td-right">49,8</td><td class="td-right td-bold">401,9 tỷ</td></tr>
+              <tr><td>Chung cư Block C — VT1 (3.132 m²) <em>(V1: tăng)</em></td><td class="td-right">3.132</td><td>VT1 đất ở</td><td class="td-right">49,8</td><td class="td-right td-bold">155,9 tỷ</td></tr>
+              <tr><td>Chung cư Block A+B — VT2 (130m còn lại)</td><td class="td-right">20.755</td><td>VT2 đất ở</td><td class="td-right">34,5</td><td class="td-right td-bold">716,0 tỷ</td></tr>
+              <tr><td>Liên kế TT13</td><td class="td-right">11.150</td><td>VT2 đất ở</td><td class="td-right">34,5</td><td class="td-right td-bold">384,7 tỷ</td></tr>
+              <tr><td>Liên kế TT14</td><td class="td-right">11.149</td><td>VT3 đất ở</td><td class="td-right">23,0</td><td class="td-right td-bold">256,4 tỷ</td></tr>
+              <tr class="td-total-row"><td><strong>Tổng CMĐSDĐ</strong></td><td class="td-right"><strong>54.257</strong></td><td><em>bq ~35,3 tr/m²</em></td><td></td><td class="td-right"><strong>~1.915 tỷ</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7 -->
+    <div id="s7" class="section">
+      <div class="sec-header">
+        <div class="sec-num">07</div>
+        <div>
+          <div class="sec-label">Phần 7</div>
+          <div class="sec-title">Doanh Thu Dự Kiến</div>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">Công thức định giá</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Sản phẩm</th><th>Công thức</th><th>Đơn giá</th></tr></thead>
+            <tbody>
+              <tr><td>Căn hộ chung cư</td><td>75% tổng sàn</td><td><strong>70 tr/m² sàn thương phẩm</strong></td></tr>
+              <tr><td>Thương mại dịch vụ tầng đế</td><td>55% tổng sàn</td><td><strong>90 tr/m² sàn thương phẩm</strong></td></tr>
+              <tr><td>Biệt thự</td><td>Trọn gói/m² đất</td><td><strong>150 tr/m² đất</strong> (độ nhạy 120–150)</td></tr>
+              <tr><td>Nhà liên kế</td><td>Trọn gói/m² đất</td><td><strong>120 tr/m² đất</strong> (độ nhạy 100–130)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">Tính toán doanh thu</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Sản phẩm</th><th class="td-right">Khối lượng</th><th class="td-right">Đơn giá</th><th class="td-right">Doanh thu</th></tr></thead>
+            <tbody>
+              <tr><td>Căn hộ — sàn thương phẩm 149.052 m²</td><td class="td-right">149.052 m²</td><td class="td-right">70 tr/m²</td><td class="td-right td-bold">10.434 tỷ</td></tr>
+              <tr><td>TMDV tầng đế — 13.200 m² thương phẩm</td><td class="td-right">13.200 m²</td><td class="td-right">90 tr/m²</td><td class="td-right td-bold">1.188 tỷ</td></tr>
+              <tr><td>Biệt thự — 19.365,5 m² đất</td><td class="td-right">19.365,5 m²</td><td class="td-right">150 tr/m²</td><td class="td-right td-bold">2.905 tỷ</td></tr>
+              <tr><td>Liên kế — 2.934 m² đất</td><td class="td-right">2.934 m²</td><td class="td-right">120 tr/m²</td><td class="td-right td-bold">352 tỷ</td></tr>
+              <tr class="td-total-row"><td><strong>Tổng doanh thu</strong></td><td></td><td></td><td class="td-right"><strong>14.879 tỷ</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div id="s8" class="section">
+      <div class="sec-header">
+        <div class="sec-num">08</div>
+        <div>
+          <div class="sec-label">Phần 8</div>
+          <div class="sec-title">Ma Trận Kết Quả</div>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">Giả định đầu vào</div>
+        <div class="card-row">
+          <div class="card amber"><div class="card-num">14.879</div><div class="card-label">Doanh thu (tỷ)</div><p>Giá cơ sở CH 70 tr/m²</p></div>
+          <div class="card amber"><div class="card-num">3.917</div><div class="card-label">Chi phí XD (tỷ)</div><p>222.736 m² × 15 tr + thấp tầng + hạ tầng</p></div>
+          <div class="card amber"><div class="card-num">1.915</div><div class="card-label">Tiền SDĐ (tỷ)</div><p>NQ 87/2025 — bảng giá trực tiếp</p></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-soft)">Bán hàng &amp; tiếp thị: 10% DT = 1.488 tỷ · Tư vấn pháp lý: 120 tỷ · Tư vấn TK &amp; thẩm tra: 3% XD = 118 tỷ · Quản lý: 2% XD = 78 tỷ</p>
+      </div>
+
+      <div id="s8-1" class="subsec">
+        <div class="subsec-title">8.1 Kết quả tổng hợp — hai phương án giá đất</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Chỉ tiêu</th><th class="td-right">PA A — 15 tr/m²</th><th class="td-right">PA B — 13 tr/m² + PC 15 tr</th></tr></thead>
+            <tbody>
+              <tr><td>Doanh thu</td><td class="td-right td-bold">14.879 tỷ</td><td class="td-right td-bold">14.879 tỷ</td></tr>
+              <tr><td>Chi phí mua đất</td><td class="td-right">1.131 tỷ</td><td class="td-right">1.003 tỷ</td></tr>
+              <tr><td>Chi phí xây dựng &amp; hạ tầng</td><td class="td-right">3.917 tỷ</td><td class="td-right">3.917 tỷ</td></tr>
+              <tr><td>Tiền CMĐSDĐ</td><td class="td-right">1.915 tỷ</td><td class="td-right">1.915 tỷ</td></tr>
+              <tr><td>Bán hàng &amp; tiếp thị (10%)</td><td class="td-right">1.488 tỷ</td><td class="td-right">1.488 tỷ</td></tr>
+              <tr><td>Tư vấn pháp lý &amp; thủ tục</td><td class="td-right">120 tỷ</td><td class="td-right">120 tỷ</td></tr>
+              <tr><td>Tư vấn TK &amp; thẩm tra (3%)</td><td class="td-right">118 tỷ</td><td class="td-right">118 tỷ</td></tr>
+              <tr><td>Quản lý doanh nghiệp (2%)</td><td class="td-right">78 tỷ</td><td class="td-right">78 tỷ</td></tr>
+              <tr class="td-total-row"><td><strong>Tổng chi phí</strong></td><td class="td-right"><strong>8.767 tỷ</strong></td><td class="td-right"><strong>8.639 tỷ</strong></td></tr>
+              <tr><td><strong>EBIT</strong></td><td class="td-right" style="color:var(--amber);font-weight:700;font-size:15px">6.112 tỷ</td><td class="td-right" style="color:var(--amber);font-weight:700;font-size:15px">6.240 tỷ</td></tr>
+              <tr><td><strong>Tỷ suất EBIT</strong></td><td class="td-right td-bold">41,1%</td><td class="td-right td-bold">41,9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p>EBIT tăng mạnh so với OG (6.112 vs 2.004 tỷ PA A) do hệ số sử dụng đất tăng <strong>2,4×</strong> trong khi chi phí cố định (đất, CMĐSDĐ) chỉ tăng nhẹ. Chênh lệch 2 PA mua đất: <strong>128 tỷ</strong>.</p></div>
+      </div>
+
+      <div id="s8-2" class="subsec">
+        <div class="subsec-title">8.2 Độ nhạy — Giá bán căn hộ (BT = 150, LK = 120, TMDV = 90 tr/m² cố định)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th class="td-right">Giá CH (tr/m²)</th><th class="td-right">Doanh thu</th><th class="td-right">BH 10%</th><th class="td-right">EBIT PA A</th><th class="td-right">Tỷ suất</th><th class="td-right">EBIT PA B</th><th class="td-right">Tỷ suất</th></tr></thead>
+            <tbody>
+              <tr><td class="td-right">60</td><td class="td-right">13.388 tỷ</td><td class="td-right">1.339 tỷ</td><td class="td-right">4.770 tỷ</td><td class="td-right">35,6%</td><td class="td-right">4.898 tỷ</td><td class="td-right">36,6%</td></tr>
+              <tr><td class="td-right">65</td><td class="td-right">14.133 tỷ</td><td class="td-right">1.413 tỷ</td><td class="td-right">5.441 tỷ</td><td class="td-right">38,5%</td><td class="td-right">5.569 tỷ</td><td class="td-right">39,4%</td></tr>
+              <tr class="td-base"><td class="td-right"><strong>70 ← cơ sở</strong></td><td class="td-right td-bold">14.879 tỷ</td><td class="td-right">1.488 tỷ</td><td class="td-right td-bold">6.112 tỷ</td><td class="td-right td-bold">41,1%</td><td class="td-right td-amber"><strong>6.240 tỷ</strong></td><td class="td-right td-amber"><strong>41,9%</strong></td></tr>
+              <tr><td class="td-right">75</td><td class="td-right">15.624 tỷ</td><td class="td-right">1.562 tỷ</td><td class="td-right">6.783 tỷ</td><td class="td-right">43,4%</td><td class="td-right">6.911 tỷ</td><td class="td-right">44,2%</td></tr>
+              <tr><td class="td-right">80</td><td class="td-right">16.369 tỷ</td><td class="td-right">1.637 tỷ</td><td class="td-right">7.453 tỷ</td><td class="td-right">45,5%</td><td class="td-right">7.581 tỷ</td><td class="td-right">46,3%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="s8-3" class="subsec">
+        <div class="subsec-title">8.3 Độ nhạy — Giá biệt thự (LK = 120, CH = 70 tr/m² cố định)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th class="td-right">Giá BT (tr/m²)</th><th class="td-right">Doanh thu</th><th class="td-right">BH 10%</th><th class="td-right">EBIT PA A</th><th class="td-right">Tỷ suất</th><th class="td-right">EBIT PA B</th><th class="td-right">Tỷ suất</th></tr></thead>
+            <tbody>
+              <tr><td class="td-right">120</td><td class="td-right">14.298 tỷ</td><td class="td-right">1.430 tỷ</td><td class="td-right">5.589 tỷ</td><td class="td-right">39,1%</td><td class="td-right">5.717 tỷ</td><td class="td-right">40,0%</td></tr>
+              <tr><td class="td-right">130</td><td class="td-right">14.492 tỷ</td><td class="td-right">1.449 tỷ</td><td class="td-right">5.764 tỷ</td><td class="td-right">39,8%</td><td class="td-right">5.892 tỷ</td><td class="td-right">40,7%</td></tr>
+              <tr><td class="td-right">140</td><td class="td-right">14.685 tỷ</td><td class="td-right">1.469 tỷ</td><td class="td-right">5.937 tỷ</td><td class="td-right">40,4%</td><td class="td-right">6.065 tỷ</td><td class="td-right">41,3%</td></tr>
+              <tr class="td-base"><td class="td-right"><strong>150 ← cơ sở</strong></td><td class="td-right td-bold">14.879 tỷ</td><td class="td-right">1.488 tỷ</td><td class="td-right td-bold">6.112 tỷ</td><td class="td-right td-bold">41,1%</td><td class="td-right td-amber"><strong>6.240 tỷ</strong></td><td class="td-right td-amber"><strong>41,9%</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="s8-4" class="subsec">
+        <div class="subsec-title">8.4 Độ nhạy — Giá liên kế (BT = 150, CH = 70 tr/m² cố định)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th class="td-right">Giá LK (tr/m²)</th><th class="td-right">Doanh thu</th><th class="td-right">BH 10%</th><th class="td-right">EBIT PA A</th><th class="td-right">Tỷ suất</th><th class="td-right">EBIT PA B</th><th class="td-right">Tỷ suất</th></tr></thead>
+            <tbody>
+              <tr><td class="td-right">100</td><td class="td-right">14.820 tỷ</td><td class="td-right">1.482 tỷ</td><td class="td-right">6.059 tỷ</td><td class="td-right">40,9%</td><td class="td-right">6.187 tỷ</td><td class="td-right">41,8%</td></tr>
+              <tr><td class="td-right">110</td><td class="td-right">14.850 tỷ</td><td class="td-right">1.485 tỷ</td><td class="td-right">6.086 tỷ</td><td class="td-right">41,0%</td><td class="td-right">6.214 tỷ</td><td class="td-right">41,9%</td></tr>
+              <tr class="td-base"><td class="td-right"><strong>120 ← cơ sở</strong></td><td class="td-right td-bold">14.879 tỷ</td><td class="td-right">1.488 tỷ</td><td class="td-right td-bold">6.112 tỷ</td><td class="td-right td-bold">41,1%</td><td class="td-right td-amber"><strong>6.240 tỷ</strong></td><td class="td-right td-amber"><strong>41,9%</strong></td></tr>
+              <tr><td class="td-right">130</td><td class="td-right">14.908 tỷ</td><td class="td-right">1.491 tỷ</td><td class="td-right">6.138 tỷ</td><td class="td-right">41,2%</td><td class="td-right">6.266 tỷ</td><td class="td-right">42,1%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9 -->
+    <div id="s9" class="section">
+      <div class="sec-header">
+        <div class="sec-num">09</div>
+        <div>
+          <div class="sec-label">Phần 9</div>
+          <div class="sec-title">Các Chỉ Tiêu Bổ Sung</div>
+        </div>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">9.1 Kết quả tài chính (giá CH = 70 tr/m² cơ sở)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Khoản</th><th class="td-right">PA A — đất 15 tr/m²</th><th class="td-right">PA B — đất 13 tr/m²</th></tr></thead>
+            <tbody>
+              <tr><td><strong>EBIT</strong></td><td class="td-right td-amber" style="font-size:15px">6.112 tỷ</td><td class="td-right td-amber" style="font-size:15px">6.240 tỷ</td></tr>
+              <tr><td>Lãi vay ước tính</td><td class="td-right">~850 tỷ</td><td class="td-right">~850 tỷ</td></tr>
+              <tr><td><strong>Lợi nhuận trước thuế (EBT)</strong></td><td class="td-right td-bold">~5.262 tỷ</td><td class="td-right td-bold">~5.390 tỷ</td></tr>
+              <tr><td>Thuế TNDN 20%</td><td class="td-right">~1.052 tỷ</td><td class="td-right">~1.078 tỷ</td></tr>
+              <tr class="td-total-row"><td><strong>Lợi nhuận sau thuế</strong></td><td class="td-right"><strong>~4.210 tỷ</strong></td><td class="td-right"><strong>~4.312 tỷ</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12px;color:var(--ink-soft)">Lãi vay: vay ~35% tổng vốn (~2.437 tỷ) × 10%/năm × 3–4 năm phân bổ đều. Cần mô hình dòng tiền (IRR) để xác định chính xác.</p>
+      </div>
+      <div class="subsec">
+        <div class="subsec-title">9.2 Vốn đầu tư và hiệu quả vốn</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Chỉ tiêu</th><th class="td-right">Giá đất 15 tr/m²</th><th class="td-right">Giá đất 13 tr/m²</th></tr></thead>
+            <tbody>
+              <tr><td>Tổng vốn (mua đất + XD + tiền SDĐ)</td><td class="td-right td-bold">6.963 tỷ</td><td class="td-right td-bold">6.835 tỷ</td></tr>
+              <tr><td>EBIT / Tổng vốn đầu tư</td><td class="td-right td-amber">87,8%</td><td class="td-right td-amber">91,3%</td></tr>
+              <tr><td>EBIT / Vốn mua đất</td><td class="td-right td-amber">5,40×</td><td class="td-right td-amber">6,22×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S10 -->
+    <div id="s10" class="section">
+      <div class="sec-header">
+        <div class="sec-num">10</div>
+        <div>
+          <div class="sec-label">Phần 10</div>
+          <div class="sec-title">Phân Tích Phần Đất Công Ty Phú Cường (11.293 m²)</div>
+        </div>
+      </div>
+      <ul class="bullet-list">
+        <li><strong>Giá tạm tính:</strong> 15 tr/m² — cùng mức giá chào chung</li>
+        <li><strong>Phương án đàm phán:</strong> Phú Cường là pháp nhân sẵn sàng thương lượng — không có tranh chấp pháp lý. Dự kiến hoàn tất trong giai đoạn chuẩn bị triển khai</li>
+        <li><strong>Biên độ giá:</strong> Nếu cao hơn 15% (+25 tỷ) → Margin giảm ~0,2 pp; cao hơn 25% (+42 tỷ) → −0,3 pp — không ảnh hưởng đáng kể</li>
+      </ul>
+    </div>
+
+    <!-- S11 -->
+    <div id="s11" class="section">
+      <div class="sec-header">
+        <div class="sec-num">11</div>
+        <div>
+          <div class="sec-label">Phần 11</div>
+          <div class="sec-title">Các Khoản Chưa Tính</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Khoản mục</th><th class="td-right">Ước tính (V1)</th><th>Ghi chú</th></tr></thead>
+          <tbody>
+            <tr><td>Thuế thu nhập doanh nghiệp (20%)</td><td class="td-right">~1.078 tỷ</td><td>Trên EBT — đã tính trong mục 9.1</td></tr>
+            <tr><td>Dự phòng phát sinh xây dựng (5%)</td><td class="td-right">~196 tỷ</td><td>5% × 3.917 tỷ</td></tr>
+            <tr><td>Phân kỳ &amp; mô hình dòng tiền (IRR)</td><td class="td-right">Cần mô hình riêng</td><td>Dự kiến IRR &gt;25%/năm — cao hơn OG do đòn bẩy quy mô</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S12 -->
+    <div id="s12" class="section">
+      <div class="sec-header">
+        <div class="sec-num">12</div>
+        <div>
+          <div class="sec-label">Phần 12</div>
+          <div class="sec-title">So Sánh V1 vs OG</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Chỉ tiêu</th><th class="td-right">OG (hệ số 3,28)</th><th class="td-right">V1 (hệ số 8)</th><th>Đánh giá</th></tr></thead>
+          <tbody>
+            <tr><td>Tổng sàn CT10</td><td class="td-right">91.366 m²</td><td class="td-right td-bold">222.736 m²</td><td class="td-amber">+2,4×</td></tr>
+            <tr><td>Sàn căn hộ thương phẩm</td><td class="td-right">32.309 m²</td><td class="td-right td-bold">149.052 m²</td><td class="td-amber">+4,6×</td></tr>
+            <tr><td>Số căn hộ</td><td class="td-right">~376 căn</td><td class="td-right td-bold">~1.987 căn</td><td class="td-amber">+5,3×</td></tr>
+            <tr><td>Doanh thu tổng</td><td class="td-right">7.866 tỷ</td><td class="td-right td-bold">14.879 tỷ</td><td class="td-amber">+89%</td></tr>
+            <tr><td>Chi phí xây dựng</td><td class="td-right">1.947 tỷ</td><td class="td-right">3.917 tỷ</td><td>+101%</td></tr>
+            <tr><td>CMĐSDĐ</td><td class="td-right">1.840 tỷ</td><td class="td-right">1.915 tỷ</td><td>+4%</td></tr>
+            <tr><td>EBIT PA B</td><td class="td-right">2.132 tỷ</td><td class="td-right td-bold">6.240 tỷ</td><td class="td-amber">+193%</td></tr>
+            <tr><td>Tỷ suất EBIT PA B</td><td class="td-right">27,1%</td><td class="td-right td-bold">41,9%</td><td class="td-amber">+14,8 pp</td></tr>
+            <tr><td>Lãi vay ước tính</td><td class="td-right">~500 tỷ</td><td class="td-right">~850 tỷ</td><td>+70%</td></tr>
+            <tr><td>LNST PA B</td><td class="td-right">~1.306 tỷ</td><td class="td-right td-bold">~4.312 tỷ</td><td class="td-amber">+3,3×</td></tr>
+            <tr class="td-total-row"><td>LNST / Tổng vốn PA B</td><td class="td-right">27,3%</td><td class="td-right"><strong>63,1%</strong></td><td class="td-amber">+35,8 pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn"><p><strong>Lưu ý pháp lý:</strong> V1 yêu cầu xin điều chỉnh QH 1/500 — chuyển Block C từ đất văn phòng/TMDV sang đất chung cư, nâng hệ số SDĐ lên 8 lần. Rủi ro pháp lý là yếu tố cần đánh giá riêng.</p></div>
+    </div>
+
+    <!-- S13 -->
+    <div id="s13" class="section">
+      <div class="sec-header">
+        <div class="sec-num">13</div>
+        <div>
+          <div class="sec-label">Phần 13</div>
+          <div class="sec-title">Lịch Sử Pháp Lý</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Năm</th><th>Sự kiện pháp lý</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1998</strong></td><td>UBND TP.HCM chấp thuận chủ trương đầu tư dự án</td></tr>
+            <tr><td><strong>1999</strong></td><td>QĐ 5080 phê duyệt nhiệm vụ quy hoạch</td></tr>
+            <tr><td><strong>2002</strong></td><td>NSG mời Eden tham gia; Eden nhận VB 623/CV-BQL phân bổ Lô 6, 12, C</td></tr>
+            <tr><td><strong>2010</strong></td><td><strong>QĐ 1/500 ban hành ngày 29/02/2010</strong> — quy hoạch chi tiết được phê duyệt</td></tr>
+            <tr><td><strong>2013</strong></td><td>QĐ 15/QĐ-BQLKN phê duyệt QH 1/500 Lô CT10, TT13, TT14</td></tr>
+            <tr><td><strong>2013</strong></td><td><strong>VB 1171/BQLKN-KHĐT xác nhận dự án không thuộc danh sách chấm dứt hiệu lực</strong></td></tr>
+            <tr><td><strong>2026</strong></td><td>Kịch bản V1: Xin điều chỉnh QH 1/500 — CT10 toàn bộ chung cư, hệ số SDĐ 8 lần</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('.nav-item, .nav-sub');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
+    navItems.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + cur); });
+  });
+</script>
+</body>
+</html>
