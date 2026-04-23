@@ -150,8 +150,7 @@
     .print-qr-label{font-size:7pt;color:#777;margin-top:3px;line-height:1.3}
     .print-qr-label span{color:#999;font-size:6.5pt}
   }
-  .print-footer{display:none}
-  .print-qr{display:none}
+  @media screen{.print-footer{display:none}.print-qr{display:none}}
   @media(max-width:900px){#sidebar{transform:translateX(-100%)}#main{margin-left:0}.hero,.content{padding-left:28px;padding-right:28px}.card-grid,.pa-grid,.img-gallery{grid-template-columns:1fr}.hero-stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -209,9 +208,9 @@
         <div class="stat-note">Giá cơ sở (CH 70 tr, BT 150 tr)</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Tỷ suất lợi nhuận (PA B)</div>
+        <div class="stat-label">Tỷ suất EBIT (PA B)</div>
         <div class="stat-value">29,8<span style="font-size:15px;font-weight:400">%</span></div>
-        <div class="stat-note">2.693 tỷ · Giá đất tham khảo</div>
+        <div class="stat-note">EBIT 2.693 tỷ · Giá đất tham khảo</div>
       </div>
       <div class="stat-box">
         <div class="stat-label">Lợi nhuận ròng ước tính (PA B)</div>
@@ -257,17 +256,17 @@
 
       <div class="img-gallery">
         <div class="img-item">
-          <img src="image/EXECUTIVE_SUMMARY/1776956378875.png" alt="Vị trí dự án — toàn cảnh khu vực">
+          <img src="../image/EXECUTIVE_SUMMARY/1776956378875.png" alt="Vị trí dự án — toàn cảnh khu vực">
           <div class="img-caption">📍 Tổng quan khu vực — giao điểm Nguyễn Văn Linh / Quản Trọng Linh, Bình Chánh</div>
         </div>
         <div class="img-item">
-          <img src="image/EXECUTIVE_SUMMARY/1776956420149.png" alt="Khu đất dự án — cận cảnh">
+          <img src="../image/EXECUTIVE_SUMMARY/1776956420149.png" alt="Khu đất dự án — cận cảnh">
           <div class="img-caption">📍 Khu đất dự án Ê Đen — mặt tiền đường Nguyễn Văn Linh, xã An Phú Tây</div>
         </div>
       </div>
 
       <div class="img-plan">
-        <img src="image/EXECUTIVE_SUMMARY/qd_1500_p1.png" alt="Bản vẽ quy hoạch chi tiết 1/500">
+        <img src="../image/EXECUTIVE_SUMMARY/qd_1500_p1.png" alt="Bản vẽ quy hoạch chi tiết 1/500">
         <div class="img-caption">🗺 Bản vẽ quy hoạch chi tiết 1/500 đã được phê duyệt — Quyết định 2010, điều chỉnh 2013 · Lô CT10 (27.842 m²), khu TT13 và TT14 (nhà ở thấp tầng)</div>
       </div>
     </div>
@@ -520,7 +519,7 @@
       </div>
 
       <div id="s7-ebit" class="subsec">
-        <div class="subsec-title">7.5 Kết quả — Lợi nhuận hoạt động</div>
+        <div class="subsec-title">7.5 Kết quả — Lợi nhuận hoạt động &amp; lợi nhuận sau thuế</div>
         <div class="tbl-wrap">
           <table>
             <thead><tr><th>Chỉ tiêu</th><th class="td-right">Phương án A — Giá đất 15 triệu/m²</th><th class="td-right">Phương án B — Giá đất 13 triệu/m² + Phú Cường 15 triệu</th></tr></thead>
@@ -532,8 +531,8 @@
               <tr><td>Chi phí bán hàng &amp; tiếp thị (10%)</td><td class="td-right">903 tỷ</td><td class="td-right">903 tỷ</td></tr>
               <tr><td>Quản lý &amp; tư vấn (3%)</td><td class="td-right">75 tỷ</td><td class="td-right">75 tỷ</td></tr>
               <tr class="td-total-row"><td><strong>Tổng chi phí</strong></td><td class="td-right"><strong>6.460 tỷ</strong></td><td class="td-right"><strong>6.332 tỷ</strong></td></tr>
-              <tr><td><strong>Lợi nhuận trước thuế</strong></td><td class="td-right" style="color:var(--teal);font-weight:700;font-size:16px">2.565 tỷ</td><td class="td-right" style="color:var(--teal);font-weight:700;font-size:16px">2.693 tỷ</td></tr>
-              <tr><td><strong>Tỷ suất lợi nhuận</strong></td><td class="td-right td-bold">28,4%</td><td class="td-right td-bold">29,8%</td></tr>
+              <tr><td><strong>EBIT (trước lãi vay &amp; thuế)</strong></td><td class="td-right" style="color:var(--teal);font-weight:700;font-size:16px">2.565 tỷ</td><td class="td-right" style="color:var(--teal);font-weight:700;font-size:16px">2.693 tỷ</td></tr>
+              <tr><td><strong>Tỷ suất EBIT</strong></td><td class="td-right td-bold">28,4%</td><td class="td-right td-bold">29,8%</td></tr>
               <tr><td>Lợi nhuận ròng ước tính (sau lãi vay &amp; thuế)</td><td class="td-right">~1.300–1.500 tỷ</td><td class="td-right">~1.500–1.700 tỷ</td></tr>
             </tbody>
           </table>
@@ -544,7 +543,7 @@
         <div class="subsec-title">7.6 Độ nhạy — Giá bán căn hộ (Phương án B — giá đất 13 triệu/m²)</div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th class="td-right">Giá căn hộ (triệu/m²)</th><th class="td-right">Doanh thu (tỷ)</th><th class="td-right">Lợi nhuận trước thuế PA B (tỷ)</th><th class="td-right">Tỷ suất</th></tr></thead>
+            <thead><tr><th class="td-right">Giá căn hộ (triệu/m²)</th><th class="td-right">Doanh thu (tỷ)</th><th class="td-right">EBIT PA B (tỷ)</th><th class="td-right">Tỷ suất EBIT</th></tr></thead>
             <tbody>
               <tr><td class="td-right">60</td><td class="td-right">8.268</td><td class="td-right">2.012</td><td class="td-right">24,3%</td></tr>
               <tr><td class="td-right">65</td><td class="td-right">8.646</td><td class="td-right">2.352</td><td class="td-right">27,2%</td></tr>
@@ -554,7 +553,7 @@
             </tbody>
           </table>
         </div>
-        <div class="note"><p><strong>Biên an toàn:</strong> Ngay ở giá bán 60 triệu/m², lợi nhuận trước thuế vẫn đạt <strong>2.012 tỷ (24,3%)</strong> — hoàn toàn khả thi trong mọi kịch bản thị trường.</p></div>
+        <div class="note"><p><strong>Biên an toàn:</strong> Ngay ở giá bán 60 triệu/m², EBIT vẫn đạt <strong>2.012 tỷ (24,3%)</strong> — hoàn toàn khả thi trong mọi kịch bản thị trường.</p></div>
       </div>
     </div>
 
@@ -634,7 +633,7 @@
   });
 </script>
 <div class="print-qr">
-  <img src="image/EXECUTIVE_SUMMARY/qr_es_og.png" alt="QR Kịch bản OG">
+  <img src="../image/EXECUTIVE_SUMMARY/EXECUTIVE_SUMMARY_OG_qr.png" alt="QR Kịch bản OG">
   <div class="print-qr-label">Scan để xem báo cáo online<br><span>khogao.github.io/eden-reports</span></div>
 </div>
 <div class="print-footer">Lê Nguyên Phi &nbsp;·&nbsp; lenguyenphi@gmail.com &nbsp;·&nbsp; 0916&nbsp;509&nbsp;000</div>
