@@ -19,20 +19,6 @@ const reports = [
     accent: 'teal',
   },
   {
-    id: 'prefs-v1',
-    tag: 'KỊCH BẢN V1',
-    tagClass: 'tag-v1',
-    title: 'Phân Tích Tiền Khả Thi',
-    subtitle: 'Chi tiết tài chính — hệ số sử dụng đất 8 lần',
-    file: 'PRE_FS_EDEN_V1.html',
-    stats: [
-      { label: 'Tổng sàn', value: '222.736 m²' },
-      { label: 'EBIT PA B', value: '41,9%' },
-      { label: 'LNST PA B', value: '~4.312 tỷ' },
-    ],
-    accent: 'amber',
-  },
-  {
     id: 'es-og',
     tag: 'KỊCH BẢN OG',
     tagClass: 'tag-og',
@@ -45,20 +31,6 @@ const reports = [
       { label: 'LNST PA B', value: '~1.600 tỷ' },
     ],
     accent: 'teal',
-  },
-  {
-    id: 'prefs-og',
-    tag: 'KỊCH BẢN OG',
-    tagClass: 'tag-og',
-    title: 'Phân Tích Tiền Khả Thi',
-    subtitle: 'Chi tiết tài chính — quy hoạch gốc 1/500',
-    file: 'PRE_FS_EDEN_OG.html',
-    stats: [
-      { label: 'Tổng sàn', value: '91.366 m²' },
-      { label: 'EBIT PA B', value: '27,1%' },
-      { label: 'LNST PA B', value: '~1.306 tỷ' },
-    ],
-    accent: 'amber',
   },
 ]
 
